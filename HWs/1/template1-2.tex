@@ -1,0 +1,142 @@
+% Search for all the places that say "PUT SOMETHING HERE".
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate}
+
+\def\Name{Quoc Thai Nguyen Truong}  % Your name
+\def\SID{24547327}  % Your student ID number
+\def\Login{cs170-ig} % Your login (your class account, cs170-xy)
+\def\Homework{1}%Number of Homework
+\def\Session{Fall 2014}
+
+
+\title{CS170--Fall 2014 --- Solutions to Homework \Homework}
+\author{\Name, SID \SID, \texttt{\Login}}
+\markboth{CS170--\Session\  Homework \Homework\ \Name}{CS170--\Session\ Homework \Homework\ \Name, \texttt{\Login}}
+\pagestyle{myheadings}
+
+\newenvironment{qparts}{\begin{enumerate}[{(}a{)}]}{\end{enumerate}}
+\def\endproofmark{$\Box$}
+\newenvironment{proof}{\par{\bf Proof}:}{\endproofmark\smallskip}
+
+\textheight=9in
+\textwidth=6.5in
+\topmargin=-.75in
+\oddsidemargin=0.25in
+\evensidemargin=0.25in
+
+
+\begin{document}
+\maketitle
+
+Collaborators: Tho Giai Truong
+
+\section*{1. Getting started} (1 page)
+
+\begin{qparts}
+\item
+I understand the course policies
+
+\item
+No, this is not allowed!
+
+\end{qparts}
+
+\newpage
+\section*{2. Proof of correctness} (2 pages)\\\\
+To show the correctness of the algorithm, we want to show that: 
+$$P(x) = \sum_{k=0}^{n} {a_k}{x^k}$$\\
+At line 3 where the execution the value of y, we have an invariant:\\
+\Large{$$ y_{n - (i + 1)} = c*y_{n - i} + a_{n - (i + 1)}$$}\\
+\Large{\textbf{Base case}}: If n = 0, then we have:
+$$Horner((a_0),c) = a_0$$
+We know that at line 1, $y_n = a_n$, so if $n = 0$, then $y_0 = a_0$ and it will ignore line 2 and line 3, and go to line 4 to return $y = a_0$. Therefore the algorithm is true for n = 0.\\\\
+\Large{\textbf{Proving the Invariant:}}\\
+We can see that if $n > 0$, then we will have a list (more than 1 element) of $(a_0, a_1, ..., a_n)$, so line 2 and 3 will be executed.\\\\
+Using the invariant, we can see that\\\\
+When $i = 0$ then $y_{n - 1} = c*y_n + a_{n - 1}$ where $y_n = a_n$ (from the line 1)\\
+When $i = 1$ then $ y_{n - 2} = c*y_{n - 1} + a_{n - 2}$ where $y_{n - 1}$ is from the previous execution (above)\\
+When $i = 2$ then $ y_{n - 3} = c*y_{n - 2} + a_{n - 3}$ where $y_{n - 2}$ is from the previous execution (above)\\
+.\\
+.\\
+.\\
+until when $i = n-1$ then $ y_{0} = c*y_{1} + a_{0}$\\\\
+Clearly, after each iteration of the loop, a constant $'c'$ will be multiply with (previous) $y_{n - i}$ and a coefficient $a_{n - (i + 1)}$ will be added. Therefore, a new y which is $y_{n - (i + 1)}$ is created. 
+
+Hence, after the complete loop is executed, we have :
+$$y = a_0 + c(a_1 + c(a_2 + ...c(a_n))...)$$
+Therefore, we have an induction hypothesis: $$y_k = a_k + c(a_{k+1} + c(a_{k+2} + ...c(a_n))...)$$ where $0 <= k <= n-(i+1)$, and $0 <= i < n$\\\\   
+\Large{Prove by induction:}\\\\
+Base: if $i = 0$ then $y_{n - 1} = c*y_{n} + a_{n-1}$ where $y_n = a_n$ (from the line 1)\\
+Induction Hypothesis: \Large{$$y_k = a_k + c(a_{k+1} + c(a_{k+2} + ...c(a_n))...)$$ where $0 <= k <= n-(i+1)$, and $0 <= i < n$\\\\  }
+Induction step:\\
+We want to show that $y_0 = a_0 + c(a_1 + c(a_2 + ...c(a_n))...)$ = $P(c) = a_nc^n + ... + a_2c^2 + a_1c + a_0$\\\\
+From line 3, when $i = n-1$ we have: 
+$$y_0 = cy_1 + a_0$$ where $y_1 = a_1 + c(a_2 + c(a_3 + ...c(a_n))...)$\\
+So $$y_0 = c(a_1 + c(a_2 + c(a_3 + ...c(a_n))...)) + a_0$$
+Which is equal to $$y_0 = a_0 + c(a_1 + c(a_2 + ...c(a_n))...) = P(c) = a_nc^n + ... + a_2c^2 + a_1c + a_0$$\\
+\Large{\textbf{Conclusion:}}\\
+Since $y_0 = P(c)$ by proving induction, the invariant guarantees this algorithm will produce the correct output. Therefore the algorithm is true for evaluating the polynomial P at the value x = c
+
+
+
+
+\newpage
+\section*{3. Prove this algorithm correct} (3 pages)\\
+\begin{qparts}
+\item
+\Large{Prove that c never goes negative:}\\
+At the line 1, we know that $c = 0$ and $v = null$.\\
+The algorithm is executed in the loop in lines 2,3, and 4.\\
+1st iteration will be the case $c = 0$ at line 3, and set $v = A[0]$. Then $c$ will be increase by 1 which give c = 1 since $v = A[0]$ at line 4.\\
+Now $c > 0$, so the next iteration, the algorithm will be executed at line 4, which will be the case of $v = A[i]$ or $c \neq A[i]$. If $v = A[i]$ then $c$ will be increment by one which is $c >= 0$. Otherwise, $v \neq A[i]$ $c$ will be decrease by one which is $c >= 0$.\\
+The next iteration, if $c = 0$ again, we go back to the very first iteration at the 3 which set $v = A[i]$ and then increasing c by 1 ($c = 1$) which give $c >= 0$ since $v = a[i]$ at line 4.\\\\
+Hence: there are 3 cases\\
+If $c = 0$ then $c = 1$ which is $c >= 0$\\
+If $v = A[i]$ then $c = c + 1$ which is $c >= 0$\\
+Else we know that $c \neq 0$ (if $c = 0$, it would have go to the first case of $c = 0$) which is $c >0$, and $c$ is decease by one, so the minimum value of $c$ after decrease the $c$ value in this "Else" case is 0. Therefore $c >= 0$\\\\
+\Large{Conclusion:}\\
+We see that these 4 cases give us $c >=0$. Therefore, \textbf{c never goes negative}\\
+%
+\item
+\Large{\textbf{Invariant}}:
+At the start of any iteration of the loop, the elements of $A[0::i-1]$ can be partitioned into two groups: a group $U_i$ of at least $c$ instances of the value $v$, and a group $P_i$ of elements that can be paired off so that the two elements in each pair differ.\\\\
+\textbf{\Large{Base case:}} %If $A is an empty list$, then the algorithm will be executed at line 1 which $c = 0$ and $v = null$ and ignore line 2,3, and 4, $U$ and $P$ are empty (since it's not making any iteration in the loop), and it returns $v = null$ at line 5 as the output.\\
+%If $A$ has only 1 element, then the algorithm will be executed at line 1 and only 1 iteration is run at line 3, which give $v = A[0]$, run at line 4 which give $c = 1$, then it return $v$ as the output\\\\
+Group $U$ and $P$ are empty at the start of the loop. The start of the loop, $i = 0$, line 3 is executed, $v$ will be set to $A[0]$, then $c = 1$ (at line 4, since $v = A[0]$). Therefore,$U = \{v\}$ (since $U \bigcup \{v\}$), and $P$ is still empty  $\to$ the hypothesis is true for base case\\\\
+
+\Large{Inductive Hypothesis:}
+At the start of any iteration of the loop, the elements of $A[0::i-1]$ can be partitioned into two groups: a group $U_i$ of at least $c$ instances of the value $v$, and a group $P_i$ of elements that can be paired off so that the two elements in each pair differ.\\\\
+\textbf{\Large{Induction Step:}}\\
+There are 3 cases, and we want to show that $U_{i+1}$ and $P_{i+1}$ are also true for these 3 cases.\\
+\Large{case 1: $c = 0$}\\
+\newcommand{\tab}{\hspace*{2em}}
+\tab Since $c = 0$,we know that $U_i$ is empty, and $P_i$ contains some pairs or no pairs. In the execution, at line 3, $v$ will be set to $A[i]$, then $c = 1$ (at line 4). Therefore, $U_{i + 1} \bigcup \{v\}$, and $P_{i+1}$ is not changed $\to$ the hypothesis is true for this case\\\\
+\Large{case 2: $c > 0$ and $v = A[i]$}\\
+\tab Since $c > 0$, we know that $U_i$ is not empty, and it has at least $c$ element(s) of value $v$, and $P_i$ contains some pairs that two elements in each pair differ or no pairs.
+In the execution, at line 4, $c$ will be increased by 1 (since $v =A[i]$).Therefore, $U_{i+1}$ will append $v$ so that $U_{i+1} \bigcup \{v\}$, and $P_{i+1}$ won't change $\to$ the hypothesis is true for this case\\\\
+\Large{case 3: $c > 0$ and $v \neq A[i]$}\\
+\tab Since $c > 0$, we know that $U_i$ is not empty, and it has at least $c$ element(s) of value v, and $P_i$ contains some pairs that two elements in each pair differ or no pairs.
+In the execution, at line 4, $c$ will be decreased by 1 (since it's "else" case). Therefore, $U_{i+1}$ will lost one element of $v$, and $P_{i+1}$ will add a pair of two element that are $(v,A[i])$ $\to$ the hypothesis is true for this case\\\\
+
+
+\item
+\Large{\textbf{Prove why the invariant from part (b) implies that the algorithm is correct}}\\\\
+\Large{Prove by contradiction:}\\
+Assume that there is a list $A$ that has a majority elements $v$ ( more than 50\% in $A$), and let $n$ be the number of $v$ in list $A$, let $m$ be the half of total elements of list $A$. After the algorithm is terminated, group $U$ is empty, and $P$ contains some pairs that two elements in each pair differ\\\\
+\textbf{\Large{Prove:}}\\
+\tab Since $n$ is the number of $v$ in list $A$ and appear more than 50\%  in list $A$, we know that $n > m$. Base on the Pigeonhole principle, with $n > m$, then at least one hole must contain more than one value of $v$. It tells that the value of $c$ must be at least 1 so $c > 0$, since the $c > 0$ we can say that group $U$ contain at least c instances of the value $v$. This is a contradiction because we assume that group $U$ is empty. Therefore, group $U$ must not be empty, and contains at least c instances of the value v.\\
+\Large{\textbf{Conclusion:}} 
+We see that group $U$ must not be empty, and contains at least c instances of the value $v$ if list $A$ has majority element of value $v$. Therefore, it's satisfy the invariant, so \textbf{the invariant implies that the algorithm is correct}.
+
+
+\end{qparts}
+
+% Remove the %'s below if you want to answer the bonus problem
+
+%\newpage
+%\section*{4. Optional bonus problem: Check my proof}
+%YOUR ANSWER GOES HERE
+
+
+\end{document}

@@ -1,0 +1,8 @@
+a,b,c: BOOLEAN;
+wa,wb,wc: BOOLEAN;
+ASSERT(a => wa);
+ASSERT(NOT(a) => NOT(wa));
+ASSERT(b => wb);
+ASSERT(NOT(b) => NOT(wb));
+ASSERT(c => (NOT(a) AND NOT(b)));
+ASSERT(NOT(c) => (a AND b));

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Usage: ./runall <command to run your program>
+# For instance, if your program can be run with 'python code/assemble.py',
+# you could run ./runall python code/assemble.py
+
+for i in 1 2 3 4 5
+do
+    echo Running on reads${i}.txt...
+    $* < reads${i}.txt > output${i}.txt
+    echo Comparing your output${i}.txt to the correct answer....
+    cmp output${i}.txt answer${i}.txt && echo output${i}.txt looks good
+done
+
+for i in 6 7 8 9 10 11 12 13 14 15 16
+do
+    echo Running on reads${i}.txt...
+    $* < reads${i}.txt > output${i}.txt
+done
